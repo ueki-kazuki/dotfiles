@@ -1,0 +1,5 @@
+[default]
+auth_server_auth_endpoint = https://cmapi.net/oauth/authorize
+auth_server_token_endpoint = https://cmapi.net/oauth/token
+redirect = https://cmapi.net/oauth/oob
+scopes = global read write
