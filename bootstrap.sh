@@ -127,6 +127,14 @@ doIt()
       )
     fi
   fi
+
+  # Install oh-my-fish
+  if which fish >/dev/null 2>&1; then
+    curl -L http://get.oh-my.fish | fish
+  else
+    echo "Can't install oh-my-fish."
+    echo "Please install fish-shell before it."
+  fi
 }
 
 dryRun()
