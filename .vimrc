@@ -69,6 +69,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline_theme='papercolor'
 let g:airline_powerline_fonts = 1
+"let g:Powerline_symbols = 'fancy'
 
 "------------------------------------------------------------
 
@@ -140,9 +141,11 @@ nmap    <C-t> [Tag]
 " tc 新しいタブを一番右に作る
 map <silent> [Tag]c :tablast <bar> tabnew<CR>
 " tn 次のタブ
-map <silent> [Tag]n :bNext<CR>
+map <silent> [Tag]n :tabnext<CR>
+nnoremap <silent> <C-j> :tabnext<CR>
 " tp 前のタブ
-map <silent> [Tag]p :bPrev<CR>
+map <silent> [Tag]p :tabprev<CR>
+nnoremap <silent> <C-k> :tabprev<CR>
 " tw タブを閉じる
 map <silent> [Tag]w :bdelete<CR>
 "------------------------------------------------------------
