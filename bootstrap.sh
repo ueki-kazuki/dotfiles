@@ -7,15 +7,18 @@ for z in {1..50}; do
     r="$(($RANDOM % 2))"
     if [[ $(($RANDOM % 5)) == 1 ]]; then
       if [[ $(($RANDOM % 4)) == 1 ]]; then
-        v+="\e[1m $r   "
+        #v+="\e[1m $r   "
+        v+="\033[1m $r   \033[0m"
       else
-        v+="\e[2m $r   "
+        #v+="\e[2m $r   "
+        v+="\033[2m $r   \033[0m"
       fi
     else
       v+="     "
     fi
   done
-  echo -e "$v"
+  #echo -e "$v"
+  printf "$v\n"
   v="";
 done
 
