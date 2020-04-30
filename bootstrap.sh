@@ -109,10 +109,10 @@ doIt()
   fi
 
   # install vim-dein
-  if [ ! -d ~/.vim/dein ];then
+  if [ ! -d ~/.local/share/vim/dein ];then
       curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
       chmod +x installer.sh
-      ./installer.sh ~/.vim/dein
+      ./installer.sh ~/.local/share/vim/dein
   fi
   # install vim-plugin-manager
   if [ ! -d ~/.vim/bundle/vundle ]; then
