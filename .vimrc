@@ -16,14 +16,14 @@ if &compatible
 endif
 
 " Required:
-set runtimepath^=$HOME/.local/share/dein/repos/github.com/Shougo/dein.vim
+set runtimepath^=$HOME/.local/share/vim/dein/repos/github.com/Shougo/dein.vim
 
 " Required:
-if dein#load_state('$HOME/.local/share/dein')
-  call dein#begin(expand('$HOME/.local/share/dein'))
+if dein#load_state('$HOME/.local/share/vim/dein')
+  call dein#begin(expand('$HOME/.local/share/vim/dein'))
 
   " Let dein manage dein
-  let s:toml_dir  = expand('$HOME/.local/share/dein/toml')
+  let s:toml_dir  = expand('$HOME/.config/vim/dein/toml')
   let s:toml      = s:toml_dir . '/dein.toml'
   let s:lazy_toml = s:toml_dir . '/dein_lazy.toml'
 
@@ -114,3 +114,6 @@ highlight Pmenu		ctermfg=gray ctermbg=black guibg=darkcyan
 highlight PmenuSel	ctermfg=white ctermbg=black guibg=black
 highlight PmenuSbar	guibg=gray
 highlight PmenuThumb	gui=reverse
+
+" Netrw
+highlight Directory     term=bold ctermfg=11 guifg=#1600FF
