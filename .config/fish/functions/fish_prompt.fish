@@ -1,4 +1,3 @@
-# Defined in /var/folders/wk/ryyk_s_13lx2pb2cjj4hk7tdkb3vt9/T//fish.NAyGTm/fish_prompt.fish @ line 2
 function fish_prompt --description 'Write out the prompt'
 	set -l last_status $status
 
