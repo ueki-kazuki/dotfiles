@@ -43,22 +43,18 @@ if dein#load_state('$HOME/.local/share/neovim/dein')
     call dein#add('roxma/nvim-yarp')
     call dein#add('roxma/vim-hug-neovim-rpc')
   endif
-  let g:deoplete#enable_at_startup = 1
 
   call dein#add('airblade/vim-gitgutter')
-  call dein#add('cespare/vim-toml')
-  call dein#add('davidhalter/jedi-vim')
-  call dein#add('fatih/vim-go')
-  call dein#add('janko-m/vim-test')
+  call dein#add('lighttiger2505/deoplete-vim-lsp')
+  call dein#add('liuchengxu/vim-which-key')
+  call dein#add('mattn/vim-lsp-settings')
+  call dein#add('prabirshrestha/vim-lsp')
   call dein#add('jiangmiao/auto-pairs')
   call dein#add('nathanaelkane/vim-indent-guides')
-  call dein#add('pangloss/vim-javascript')
-  call dein#add('tomasr/molokai')
   call dein#add('tpope/vim-fugitive')
   call dein#add('tpope/vim-surround')
   call dein#add('vim-airline/vim-airline')
   call dein#add('vim-airline/vim-airline-themes')
-  call dein#add('vim-syntastic/syntastic')
 
   " Required:
   call dein#end()
@@ -86,26 +82,25 @@ let g:airline_theme='papercolor'
 let g:airline_powerline_fonts = 1
 "let g:Powerline_symbols = 'fancy'
 
-" jediにvimの設定を任せると'completeopt+=preview'するので
-" 自動設定機能をOFFにし手動で設定を行う
-let g:jedi#auto_vim_configuration = 0
-" 補完の最初の項目が選択された状態だと使いにくいためオフにする
-let g:jedi#popup_select_first = 0
-" quickrunと被るため大文字に変更
-let g:jedi#rename_command = '<Leader>R'
-" gundoと被るため大文字に変更 (2013-06-24 10:00 追記）
-let g:jedi#goto_command = '<Leader>G'
-
-" syntasticとflake8で文法チェックを行う
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_python_checkers = ["flake8"]
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
+"------------------------------------------------------------
+" deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#lsp#handler_enabled = 1
+call deoplete#custom#option({
+    \ 'auto_complete': v:true,
+    \ 'min_pattern_length': 2,
+    \ 'auto_complete_delay': 0,
+    \ 'auto_refresh_delay': 20,
+    \ 'refresh_always': v:true,
+    \ 'smart_case': v:true,
+    \ 'camel_case': v:true,
+    \ })
+let s:use_lsp_sources = ['lsp', 'dictionary', 'file']
+call deoplete#custom#option('sources', {
+    \ 'go': s:use_lsp_sources,
+    \ 'python': s:use_lsp_sources,
+    \ 'vim': ['vim', 'buffer', 'dictionary', 'file'],
+    \})
 
 "------------------------------------------------------------
 " Python mode
@@ -178,38 +173,21 @@ highlight PmenuThumb	gui=reverse
 " Netrw
 highlight Directory     term=bold ctermfg=11 guifg=#1600FF
 
-" Committia
-" 2020/12/21
-" ===
-" TOO SLOW to open vim window
-" ===
-" let g:committia_hooks = {}
-" function! g:committia_hooks.edit_open(info)
-"     " Additional settings
-"     setlocal spell
-"
-"     " If no commit message, start with insert mode
-"     if a:info.vcs ==# 'git' && getline(1) ==# ''
-"         startinsert
-"     endif
-"
-"     " Scroll the diff window from insert mode
-"     " Map <C-n> and <C-p>
-"     imap <buffer><C-n> <Plug>(committia-scroll-diff-down-half)
-"     imap <buffer><C-p> <Plug>(committia-scroll-diff-up-half)
-" endfunction
-
 " Denite
 " 2021/01/06
 " Define mappings
-" let g:python3_host_prog = expand('/Users/uekikazuki/.pyenv/shims/python3')
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
-call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+call denite#custom#var('file/rec', 'command',
+                       \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'recursive_opts', [])
 call denite#custom#var('grep', 'pattern_opt', [])
 call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
+" Define alias
+call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+call denite#custom#var('file/rec/git', 'command',
+      \ ['git', 'ls-files', '-co', '--exclude-standard'])
 autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
   nnoremap <silent><buffer><expr> <Esc>
@@ -308,22 +286,30 @@ endfunction
 " Leader
 " 2021/01/05
 let mapleader = "\<Space>"
-" nnoremap <Leader>o :Explore<CR>
-nnoremap <Leader>o :Defx<CR>
+let maplocalleader = ","
+nnoremap <silent><Leader>o :<C-u>Denite `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
 nnoremap <Leader>r :tabedit $HOME/.vimrc<CR>
-" nnoremap <leader>f :<C-u>Denite file/rec file:new<CR>
 nnoremap <leader>g :<C-u>Denite grep<CR>
 nnoremap <leader>l :<C-u>Denite line<CR>
-nnoremap <leader>y :<C-u>Denite neoyank<CR>
 nnoremap <leader>s :<C-u>split<CR>
 nnoremap <leader>v :<C-u>vsplit<CR>
-" nnoremap <leader><Space> :<C-u>Denite buffer<CR>
+nnoremap <leader>q :<C-u>close<CR>
 nnoremap <silent> <C-t><C-t>   :<C-u>Denite buffer<CR>
 nnoremap <silent> <C-t>t       :<C-u>Denite buffer<CR>
-nnoremap <silent> <C-t>c       :<C-u>Denite file/rec<CR>
-nnoremap <silent> <C-t><C-c>   :<C-u>Denite file/rec<CR>
-nnoremap <silent> <C-o>        :<C-u>Denite file buffer file:new<CR>
 nnoremap <silent> <C-t><C-p>   :<C-u>Denite buffer -resume -cursor-pos=+1 -immediately<CR>
 nnoremap <silent> <C-t>p       :<C-u>Denite buffer -resume -cursor-pos=+1 -immediately<CR>
 nnoremap <silent> <C-t><C-n>   :<C-u>Denite buffer -resume -cursor-pos=-1 -immediately<CR>
 nnoremap <silent> <C-t>n       :<C-u>Denite buffer -resume -cursor-pos=-1 -immediately<CR>
+
+" vim-which-key
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :WhichKeyVisual '<Space>'<CR>
+vnoremap <silent> <Leader>y "+y
+vnoremap <silent> <Leader>d "+d
+nnoremap <silent> <Leader>p "+p
+nnoremap <silent> <Leader>P "+P
+vnoremap <silent> <Leader>p "+p
+vnoremap <silent> <Leader>P "+P
+autocmd! FileType which_key
+autocmd  FileType which_key set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
