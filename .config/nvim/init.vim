@@ -304,7 +304,11 @@ nnoremap <silent> <C-t>n       :<C-u>Denite buffer -resume -cursor-pos=-1 -immed
 " vim-which-key
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :WhichKeyVisual '<Space>'<CR>
+nnoremap <silent> <leader><leader> :Denite buffer file_mru<CR>
+nnoremap <silent> <leader>* :<C-u>DeniteCursorWord grep
+nnoremap <silent> <Leader>y "+y
 vnoremap <silent> <Leader>y "+y
+nnoremap <silent> <Leader>d "+d
 vnoremap <silent> <Leader>d "+d
 nnoremap <silent> <Leader>p "+p
 nnoremap <silent> <Leader>P "+P
@@ -313,3 +317,31 @@ vnoremap <silent> <Leader>P "+P
 autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+" Including unlisted buffers in the cycle
+" 2021/02/08
+" https://vim.fandom.com/wiki/Cycle_through_buffers_including_hidden_buffers
+function! SwitchToNextBuffer(incr)
+  let help_buffer = (&filetype == 'help')
+  let current = bufnr("%")
+  let last = bufnr("$")
+  let new = current + a:incr
+  while 1
+    if new != 0 && bufexists(new) && bufloaded(new) && ((getbufvar(new, "&filetype") == 'help') == help_buffer)
+      execute ":buffer ".new
+      break
+    else
+      let new = new + a:incr
+      if new < 1
+        let new = last
+      elseif new > last
+        let new = 1
+      endif
+      if new == current
+        break
+      endif
+    endif
+  endwhile
+endfunction
+nnoremap <silent> <C-n> :call SwitchToNextBuffer(1)<CR>
+nnoremap <silent> <C-p> :call SwitchToNextBuffer(-1)<CR>
