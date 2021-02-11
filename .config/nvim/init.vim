@@ -85,6 +85,7 @@ if dein#load_state('$HOME/.local/share/neovim/dein')
   call dein#add('lighttiger2505/deoplete-vim-lsp')
   call dein#add('liuchengxu/vim-which-key')
   call dein#add('mattn/vim-lsp-settings')
+  call dein#add('mhinz/vim-startify')
   call dein#add('prabirshrestha/vim-lsp')
   call dein#add('jiangmiao/auto-pairs')
   call dein#add('nathanaelkane/vim-indent-guides')
@@ -109,7 +110,9 @@ if dein#check_install()
   call dein#install()
 endif
 "End dein Scripts-------------------------
+"}}}
 
+" airline {{{
 set laststatus=2
 set showtabline=2 " 常にタブラインを表示
 set t_Co=256
@@ -118,9 +121,10 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline_theme='papercolor'
 let g:airline_powerline_fonts = 1
 "let g:Powerline_symbols = 'fancy'
+" }}}
 
+" deoplete {{{
 "------------------------------------------------------------
-" deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#lsp#handler_enabled = 1
 call deoplete#custom#option({
@@ -138,37 +142,41 @@ call deoplete#custom#option('sources', {
     \ 'python': s:use_lsp_sources,
     \ 'vim': ['vim', 'buffer', 'dictionary', 'file'],
     \})
+"}}}
 
-"------------------------------------------------------------
-" Python mode
+" Python mode{{{
 autocmd FileType python setl autoindent
 autocmd FileType python setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd FileType python setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType python setl list listchars=tab:>-,eol:\ ,trail:_
 autocmd FileType python setl completeopt-=preview
 autocmd FileType python syntax enable
+"}}}
 
-" Shell mode
+" Shell mode{{{
 autocmd FileType sh setl autoindent
 autocmd FileType sh setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd FileType sh setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType sh setl list listchars=tab:>-,eol:\ ,trail:_
 autocmd FileType sh setl completeopt-=preview
 autocmd FileType sh syntax enable
+"}}}
 
-" JavaScript mode
+" JavaScript mode{{{
 autocmd FileType javascript setl autoindent
 autocmd FileType javascript setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd FileType javascript setl tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd FileType javascript setl list listchars=tab:>-,eol:\ ,trail:_
 autocmd FileType javascript setl completeopt-=preview
 autocmd FileType javascript syntax enable
+"}}}
 
-" YAML
+" YAML{{{
 " 2018/03/11
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+"}}}
 
-" Golang
+" Golang{{{
 " 2016/08/08
 autocmd FileType go setl autoindent
 autocmd FileType go setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -176,22 +184,23 @@ autocmd FileType go setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType go setl list listchars=tab:.\ ,eol:\ ,trail:_
 autocmd FileType go setl completeopt-=preview
 autocmd FileType go syntax enable
+"}}}
 
-" toml
+" toml{{{
 " autocmd FileType toml syntax enable
 "------------------------------------------------------------
+"}}}
 
-"------------------------------------------------------------
-" highlight
-
+" highlight{{{
 " アンダーラインを引く(color terminal)
 highlight CursorLine   cterm=underline ctermfg=NONE ctermbg=NONE gui=underline guifg=NONE guibg=NONE
 
 " 行番号
 highlight LineNr       term=underline  ctermfg=130  ctermbg=None gui=underline guifg=Brown
 highlight CursorLineNr cterm=bold      ctermfg=255  ctermbg=130  gui=bold      guifg=Brown
+"}}}
 
-" Gdiff
+" Gdiff{{{
 " 2016/08/08
 " vimdiffの色設定
 set runtimepath^=$HOME/.vim/after
@@ -199,18 +208,21 @@ highlight DiffAdd     ctermfg=78   ctermbg=235
 highlight DiffDelete  ctermfg=168  ctermbg=235
 highlight DiffChange  ctermfg=0    ctermbg=42
 highlight DiffText    ctermfg=255  ctermbg=199
+"}}}
 
-" Pmenu
+" Pmenu{{{
 " 2019/12/25
 highlight Pmenu		ctermfg=gray ctermbg=black guibg=darkcyan
 highlight PmenuSel	ctermfg=white ctermbg=black guibg=black
 highlight PmenuSbar	guibg=gray
 highlight PmenuThumb	gui=reverse
+"}}}
 
-" Netrw
+" Netrw{{{
 highlight Directory     term=bold ctermfg=11 guifg=#1600FF
+"}}}
 
-" Denite
+" Denite{{{
 " 2021/01/06
 " Define mappings
 let g:python_host_prog = '/usr/bin/python'
@@ -250,83 +262,60 @@ function! s:denite_my_settings() abort
   nnoremap <silent><buffer><expr> ^
   \ denite#do_map('move_up_path')
 endfunction
+"}}}
 
-" defx
+" defx{{{
 " 2021/02/02
 " from :help defx-help
 autocmd FileType defx call s:defx_my_settings()
+call defx#custom#option('_', {
+	\ 'ignored_files': '.*,__pycache__'
+	\ })
 function! s:defx_my_settings() abort
   " Define mappings
-  nnoremap <silent><buffer><expr> <CR>
-  \ defx#do_action('open')
-  nnoremap <silent><buffer><expr> c
-  \ defx#do_action('copy')
-  nnoremap <silent><buffer><expr> m
-  \ defx#do_action('move')
-  nnoremap <silent><buffer><expr> p
-  \ defx#do_action('paste')
-  nnoremap <silent><buffer><expr> l
-  \ defx#do_action('open')
-  nnoremap <silent><buffer><expr> E
-  \ defx#do_action('open', 'vsplit')
-  nnoremap <silent><buffer><expr> P
-  \ defx#do_action('preview')
-  nnoremap <silent><buffer><expr> o
-  \ defx#do_action('open_tree', 'toggle')
-  nnoremap <silent><buffer><expr> K
-  \ defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> N
-  \ defx#do_action('new_file')
-  nnoremap <silent><buffer><expr> M
-  \ defx#do_action('new_multiple_files')
-  nnoremap <silent><buffer><expr> C
-  \ defx#do_action('toggle_columns',
-  \                'mark:indent:icon:filename:type:size:time')
-  nnoremap <silent><buffer><expr> S
-  \ defx#do_action('toggle_sort', 'time')
-  nnoremap <silent><buffer><expr> d
-  \ defx#do_action('remove')
-  nnoremap <silent><buffer><expr> r
-  \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> !
-  \ defx#do_action('execute_command')
-  nnoremap <silent><buffer><expr> x
-  \ defx#do_action('execute_system')
-  nnoremap <silent><buffer><expr> yy
-  \ defx#do_action('yank_path')
-  nnoremap <silent><buffer><expr> .
-  \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> ;
-  \ defx#do_action('repeat')
-  nnoremap <silent><buffer><expr> h
-  \ defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> ~
-  \ defx#do_action('cd')
-  nnoremap <silent><buffer><expr> q
-  \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> <Space>
-  \ defx#do_action('toggle_select') . 'j'
-  nnoremap <silent><buffer><expr> *
-  \ defx#do_action('toggle_select_all')
-  nnoremap <silent><buffer><expr> j
-  \ line('.') == line('$') ? 'gg' : 'j'
-  nnoremap <silent><buffer><expr> k
-  \ line('.') == 1 ? 'G' : 'k'
-  nnoremap <silent><buffer><expr> <C-l>
-  \ defx#do_action('redraw')
-  nnoremap <silent><buffer><expr> <C-g>
-  \ defx#do_action('print')
-  nnoremap <silent><buffer><expr> cd
-  \ defx#do_action('change_vim_cwd')
+  nnoremap <silent><buffer><expr> <CR>    defx#do_action('open')
+  nnoremap <silent><buffer><expr> a       defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> c       defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m       defx#do_action('move')
+  nnoremap <silent><buffer><expr> p       defx#do_action('paste')
+  nnoremap <silent><buffer><expr> l       defx#do_action('open')
+  nnoremap <silent><buffer><expr> E       defx#do_action('open', 'vsplit')
+  nnoremap <silent><buffer><expr> P       defx#do_action('preview')
+  nnoremap <silent><buffer><expr> o       defx#do_action('open_tree', 'toggle')
+  nnoremap <silent><buffer><expr> K       defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> N       defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> M       defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> C       defx#do_action('toggle_columns',
+  					  	\ 'mark:indent:icon:filename:type:size:time')
+  nnoremap <silent><buffer><expr> S       defx#do_action('toggle_sort', 'time')
+  nnoremap <silent><buffer><expr> d       defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r       defx#do_action('rename')
+  nnoremap <silent><buffer><expr> !       defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> x       defx#do_action('execute_system')
+  nnoremap <silent><buffer><expr> yy      defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> ;       defx#do_action('repeat')
+  nnoremap <silent><buffer><expr> u       defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> ~       defx#do_action('cd')
+  nnoremap <silent><buffer><expr> q       defx#do_action('quit')
+  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
+  nnoremap <silent><buffer><expr> *       defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> j       line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k       line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> <C-l>   defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> <C-g>   defx#do_action('print')
+  nnoremap <silent><buffer><expr> cd      defx#do_action('change_vim_cwd')
 endfunction
+"}}}
 
-" Leader
+" Leader{{{
 " 2021/01/05
 let mapleader = "\<Space>"
 let maplocalleader = ","
 nnoremap <silent><Leader>o :<C-u>Denite `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
+nnoremap <Leader>E :Defx<CR>
 nnoremap <Leader>r :tabedit $HOME/.vimrc<CR>
 nnoremap <leader>g :<C-u>Denite grep<CR>
+nnoremap <leader>j :<C-u>Denite jump<CR>
 nnoremap <leader>l :<C-u>Denite line<CR>
 nnoremap <leader>s :<C-u>split<CR>
 nnoremap <leader>v :<C-u>vsplit<CR>
@@ -337,8 +326,9 @@ nnoremap <silent> <C-t><C-p>   :<C-u>Denite buffer -resume -cursor-pos=+1 -immed
 nnoremap <silent> <C-t>p       :<C-u>Denite buffer -resume -cursor-pos=+1 -immediately<CR>
 nnoremap <silent> <C-t><C-n>   :<C-u>Denite buffer -resume -cursor-pos=-1 -immediately<CR>
 nnoremap <silent> <C-t>n       :<C-u>Denite buffer -resume -cursor-pos=-1 -immediately<CR>
+"}}}
 
-" vim-which-key
+" vim-which-key{{{
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :WhichKeyVisual '<Space>'<CR>
 nnoremap <silent> <leader><leader> :Denite buffer file_mru<CR>
@@ -354,8 +344,9 @@ vnoremap <silent> <Leader>P "+P
 autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+"}}}
 
-" Including unlisted buffers in the cycle
+" Including unlisted buffers in the cycle{{{
 " 2021/02/08
 " https://vim.fandom.com/wiki/Cycle_through_buffers_including_hidden_buffers
 function! SwitchToNextBuffer(incr)
@@ -382,3 +373,45 @@ function! SwitchToNextBuffer(incr)
 endfunction
 nnoremap <silent> <C-n> :call SwitchToNextBuffer(1)<CR>
 nnoremap <silent> <C-p> :call SwitchToNextBuffer(-1)<CR>
+"}}}
+
+" startify{{{
+" https://github.com/mhinz/vim-startify/wiki/Example-configurations
+" returns all modified files of the current git repo
+" `2>/dev/null` makes the command fail quietly, so that when we are not
+" in a git repo, the list will be empty
+function! s:gitModified()
+    let files = systemlist('git ls-files -m 2>/dev/null')
+    return map(files, "{'line': v:val, 'path': v:val}")
+endfunction
+
+" same as above, but show untracked files, honouring .gitignore
+function! s:gitUntracked()
+    let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
+    return map(files, "{'line': v:val, 'path': v:val}")
+endfunction
+let g:startify_lists = [
+        \ { 'type': 'files',     'header': ['   MRU']            },
+        \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+        \ { 'type': 'sessions',  'header': ['   Sessions']       },
+        \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+        \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
+        \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
+        \ { 'type': 'commands',  'header': ['   Commands']       },
+        \ ]
+"}}}
+
+" Git (fugitive){{{
+nnoremap <leader>Gs :tab split<CR>:Gstatus<CR>:only<CR>
+nnoremap <leader>Ga :Gwrite<CR>
+nnoremap <leader>Gc :Gcommit<CR>
+nnoremap <leader>Gb :Gblame<CR>
+nnoremap <leader>Gl :Git log<CR>
+nnoremap <leader>Gh :tab sp<CR>:0Glog<CR>
+nnoremap <leader>Gp :Gpush<CR>
+nnoremap <leader>Gf :Gfetch<CR>
+nnoremap <leader>Gd :Gvdiff<CR>
+nnoremap <leader>Gr :Grebase -i<CR>
+nnoremap <leader>Gg :Ggrep
+nnoremap <leader>Gm :Gmerge
+"}}}
