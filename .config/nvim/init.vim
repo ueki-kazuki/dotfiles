@@ -9,7 +9,44 @@ autocmd InsertEnter * norm zz
 " Remove trailing whitespace on save
 autocmd BufWritePre * %s/\s\+$//e
 
-"------------------------------------------------------------
+" DONT USE plugins {{{
+let g:loaded_gzip              = 1
+let g:loaded_tar               = 1
+let g:loaded_tarPlugin         = 1
+let g:loaded_zip               = 1
+let g:loaded_zipPlugin         = 1
+let g:loaded_rrhelper          = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_vimball           = 1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_getscript         = 1
+let g:loaded_getscriptPlugin   = 1
+let g:loaded_netrw             = 1
+let g:loaded_netrwPlugin       = 1
+let g:loaded_netrwSettings     = 1
+let g:loaded_netrwFileHandlers = 1
+" }}}
+
+" NetRW
+let g:netrw_liststyle = 1 " long listing
+let g:netrw_list_hide = netrw_gitignore#Hide()
+
+" Find {{{
+set path+=**
+set wildmenu
+set wildignore+=*.pyc,**/.venv/**,**/__pycache__/**
+set wildignore+=**/node_modules/**
+set wildignore+=**/.git/**
+set hidden
+" }}}
+
+" fold zf/zc/zo {{{
+set foldmethod=marker
+" autocmd BufWinLeave * mkview
+" autocmd BufWinEnter * silent loadview
+"" }}}
+
+" dein {{{
 "https://github.com/Shougo/dein.vim
 "2016/08/05
 "
