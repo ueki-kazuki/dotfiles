@@ -109,26 +109,10 @@ doIt()
   fi
 
   # install vim-dein
-  if [ ! -d ~/.local/share/vim/dein ];then
+  if [ ! -d ~/.local/share/nvim/dein ];then
       curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
       chmod +x installer.sh
-      ./installer.sh ~/.local/share/vim/dein
-  fi
-  # install vim-plugin-manager
-  if [ ! -d ~/.vim/bundle/vundle ]; then
-    mkdir ~/.vim/bundle
-    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-    vim +BundleInstall +qall
-  else
-    read -p "Do you want to update vim-plugins? (y/n) " -n 1 yesOrNo
-    echo
-    if [[ $yesOrNo =~ ^[Yy]$ ]]; then
-      (
-        cd ~/.vim/bundle/vundle
-        git pull
-        vim +BundleUpdate +qall
-      )
-    fi
+      ./installer.sh ~/.local/share/nvim/dein
   fi
 
   # Install oh-my-fish
