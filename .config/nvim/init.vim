@@ -151,6 +151,7 @@ autocmd FileType python setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType python setl list listchars=tab:>-,eol:\ ,trail:_
 autocmd FileType python setl completeopt-=preview
 autocmd FileType python syntax enable
+autocmd FileType python highlight Error ctermbg=darkred guibg=white
 "}}}
 
 " Shell mode{{{
@@ -212,8 +213,9 @@ highlight DiffText    ctermfg=255  ctermbg=199
 
 " Pmenu{{{
 " 2019/12/25
+" deoplete candidates color
 highlight Pmenu		ctermfg=gray ctermbg=black guibg=darkcyan
-highlight PmenuSel	ctermfg=white ctermbg=black guibg=black
+highlight PmenuSel	ctermfg=white ctermbg=yellow guibg=black
 highlight PmenuSbar	guibg=gray
 highlight PmenuThumb	gui=reverse
 "}}}
@@ -313,7 +315,8 @@ let mapleader = "\<Space>"
 let maplocalleader = ","
 nnoremap <silent><Leader>o :<C-u>Denite `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
 nnoremap <Leader>E :Defx<CR>
-nnoremap <Leader>r :tabedit $HOME/.vimrc<CR>
+nnoremap <Leader>c :tabedit $HOME/.config/nvim/init.vim<CR>
+nnoremap <Leader>r :<C-u>Denite register<CR>
 nnoremap <leader>g :<C-u>Denite grep<CR>
 nnoremap <leader>j :<C-u>Denite jump<CR>
 nnoremap <leader>l :<C-u>Denite line<CR>
