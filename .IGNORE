@@ -22,3 +22,6 @@ examples/
 *~
 *.swp
 *.swo
+
+Library/
+.Trash/
