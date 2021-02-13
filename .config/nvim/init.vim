@@ -82,6 +82,8 @@ if dein#load_state('$HOME/.local/share/neovim/dein')
   endif
 
   call dein#add('airblade/vim-gitgutter')
+  call dein#add('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],
+                                               \ 'build': 'sh -c "cd app && yarn install"' })
   call dein#add('lighttiger2505/deoplete-vim-lsp')
   call dein#add('liuchengxu/vim-which-key')
   call dein#add('mattn/vim-lsp-settings')
@@ -271,8 +273,8 @@ endfunction
 " from :help defx-help
 autocmd FileType defx call s:defx_my_settings()
 call defx#custom#option('_', {
-	\ 'ignored_files': '.*,__pycache__'
-	\ })
+        \ 'ignored_files': '.*,__pycache__'
+        \ })
 function! s:defx_my_settings() abort
   " Define mappings
   nnoremap <silent><buffer><expr> <CR>    defx#do_action('open')
@@ -288,7 +290,7 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> N       defx#do_action('new_file')
   nnoremap <silent><buffer><expr> M       defx#do_action('new_multiple_files')
   nnoremap <silent><buffer><expr> C       defx#do_action('toggle_columns',
-  					  	\ 'mark:indent:icon:filename:type:size:time')
+                                                       \ 'mark:indent:icon:filename:type:size:time')
   nnoremap <silent><buffer><expr> S       defx#do_action('toggle_sort', 'time')
   nnoremap <silent><buffer><expr> d       defx#do_action('remove')
   nnoremap <silent><buffer><expr> r       defx#do_action('rename')
@@ -418,3 +420,10 @@ nnoremap <leader>Gr :Grebase -i<CR>
 nnoremap <leader>Gg :Ggrep
 nnoremap <leader>Gm :Gmerge
 "}}}
+
+" markdown-preview {{{
+" 2021/02/13
+" maybe need to do
+"   call mkdp#util#install()
+autocmd FileType markdown nnoremap <leader>p :<C-u>MarkdownPreview<CR>
+" }}}
