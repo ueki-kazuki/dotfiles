@@ -6,6 +6,7 @@ set -x PATH /usr/local/bin $PATH
 . (pyenv init - | psub)
 . (rbenv init - | psub)
 eval (direnv hook fish)
+set -x PATH $HOME/.cargo/bin:$PATH
 
 function fish_user_key_bindings
   bind \cr 'peco_select_history (commandline -b)'
@@ -41,5 +42,3 @@ set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
 
 alias ae="[ -x deactivate ] && deactivate >/dev/null 2>&1; source ./venv/bin/activate.fish"
 alias de="deactivate"
-alias vim="nvim"
-alias vi="nvim"
