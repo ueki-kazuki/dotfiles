@@ -189,6 +189,16 @@ autocmd FileType go setl completeopt-=preview
 autocmd FileType go syntax enable
 "}}}
 
+" Rust {{{
+autocmd FileType rust setl autoindent
+autocmd FileType rust setl smartindent
+autocmd FileType rust setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
+autocmd FileType rust setl list listchars=tab:>-,eol:\ ,trail:_
+autocmd FileType rust setl completeopt-=preview
+autocmd FileType rust syntax enable
+let g:lsp_settings_filetype_rust = 'rust-analyzer'
+"}}}
+
 " toml{{{
 " autocmd FileType toml syntax enable
 "------------------------------------------------------------
@@ -316,7 +326,7 @@ endfunction
 let mapleader = "\<Space>"
 let maplocalleader = ","
 nnoremap <silent><Leader>o :<C-u>Denite `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
-nnoremap <Leader>E :Defx<CR>
+nnoremap <Leader>E :Defx `escape(expand('%:p:h'), ' :')` -search=`expand('%:p')`<CR>
 nnoremap <Leader>c :tabedit $HOME/.config/nvim/init.vim<CR>
 nnoremap <Leader>r :<C-u>Denite register<CR>
 nnoremap <leader>g :<C-u>Denite grep<CR>
@@ -404,6 +414,7 @@ let g:startify_lists = [
         \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
         \ { 'type': 'commands',  'header': ['   Commands']       },
         \ ]
+let g:startify_disable_at_vimenter = 1
 "}}}
 
 " Git (fugitive){{{
