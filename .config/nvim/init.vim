@@ -143,6 +143,7 @@ call deoplete#custom#option('sources', {
     \ 'go': s:use_lsp_sources,
     \ 'python': s:use_lsp_sources,
     \ 'vim': ['vim', 'buffer', 'dictionary', 'file'],
+    \ 'rust': s:use_lsp_sources,
     \})
 "}}}
 
@@ -153,7 +154,6 @@ autocmd FileType python setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType python setl list listchars=tab:>-,eol:\ ,trail:_
 autocmd FileType python setl completeopt-=preview
 autocmd FileType python syntax enable
-autocmd FileType python highlight Error ctermbg=darkred guibg=white
 "}}}
 
 " Shell mode{{{
@@ -196,7 +196,6 @@ autocmd FileType rust setl tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType rust setl list listchars=tab:>-,eol:\ ,trail:_
 autocmd FileType rust setl completeopt-=preview
 autocmd FileType rust syntax enable
-let g:lsp_settings_filetype_rust = 'rust-analyzer'
 "}}}
 
 " toml{{{
@@ -211,7 +210,10 @@ highlight CursorLine   cterm=underline ctermfg=NONE ctermbg=NONE gui=underline g
 " 行番号
 highlight LineNr       term=underline  ctermfg=130  ctermbg=None gui=underline guifg=Brown
 highlight CursorLineNr cterm=bold      ctermfg=255  ctermbg=130  gui=bold      guifg=Brown
-"}}}
+
+" Error
+highlight Error ctermbg=darkred guibg=white
+" }}}
 
 " Gdiff{{{
 " 2016/08/08
