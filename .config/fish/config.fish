@@ -2,6 +2,7 @@
 set EDITOR vim
 set fish_prompt_hg_status_added "+"
 set fish_color_autosuggestion brblack
+set -x XDG_CONFIG_HOME ~/.config
 set -x PATH /usr/local/bin $PATH
 . (pyenv init - | psub)
 . (rbenv init - | psub)
@@ -39,6 +40,3 @@ set -x PIPENV_VERBOSITY -1
 # curl is keg-only, which means it was not symlinked into /usr/local,
 # need to have curl first in the PATH
 set -g fish_user_paths "/usr/local/opt/curl/bin" $fish_user_paths
-
-alias ae="[ -x deactivate ] && deactivate >/dev/null 2>&1; source ./venv/bin/activate.fish"
-alias de="deactivate"
