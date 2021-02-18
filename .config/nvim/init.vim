@@ -413,6 +413,8 @@ nnoremap <silent> <C-t>n       :<C-u>Denite buffer -resume -cursor-pos=-1 -immed
 " vim-which-key{{{
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :WhichKeyVisual '<Space>'<CR>
+nnoremap <silent> <localleader> :WhichKey ','<CR>
+vnoremap <silent> <localleader> :WhichKeyVisual ','<CR>
 autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
