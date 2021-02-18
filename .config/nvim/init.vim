@@ -156,6 +156,9 @@ call deoplete#custom#option('sources', {
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
+    setlocal foldmethod=expr
+          \ foldexpr=lsp#ui#vim#folding#foldexpr()
+          \ foldtext=lsp#ui#vim#folding#foldtext()
     nmap <buffer> <LocalLeader>d <plug>(lsp-definition)
     nmap <buffer> <LocalLeader>R <plug>(lsp-rename)
 endfunction
@@ -164,6 +167,7 @@ augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+let g:lsp_diagnostics_float_cursor = 1
 "}}}
 " Python mode{{{
 autocmd FileType python setl autoindent
