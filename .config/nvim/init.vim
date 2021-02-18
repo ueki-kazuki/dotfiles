@@ -284,15 +284,15 @@ call denite#custom#option('default', {
 \ 'winwidth': float2nr(&columns * s:floating_window_width_ratio / 2)
 \ })
 call denite#custom#var('file/rec', 'command',
-        \ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
+       \ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
 call denite#custom#var('grep', {
-	\ 'command': ['rg'],
-	\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
-	\ 'recursive_opts': [],
-	\ 'pattern_opt': ['--regexp'],
-	\ 'separator': ['--'],
-	\ 'final_opts': [],
-	\ })
+       \ 'command': ['rg'],
+       \ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
+       \ 'recursive_opts': [],
+       \ 'pattern_opt': ['--regexp'],
+       \ 'separator': ['--'],
+       \ 'final_opts': [],
+       \ })
 " Define alias
 call denite#custom#alias('source', 'file/rec/git', 'file/rec')
 call denite#custom#var('file/rec/git', 'command',
