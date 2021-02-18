@@ -128,6 +128,7 @@ let g:airline_powerline_fonts = 1
 
 " deoplete {{{
 "------------------------------------------------------------
+set dictionary=/usr/share/dict/words
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#lsp#handler_enabled = 1
 call deoplete#custom#option({
@@ -139,6 +140,7 @@ call deoplete#custom#option({
     \ 'smart_case': v:true,
     \ 'camel_case': v:true,
     \ })
+"let s:use_lsp_sources = ['lsp', 'dictionary', 'file', 'omni', 'tag', 'member']
 let s:use_lsp_sources = ['lsp', 'dictionary', 'file']
 call deoplete#custom#option('sources', {
     \ 'go': s:use_lsp_sources,
@@ -148,6 +150,21 @@ call deoplete#custom#option('sources', {
     \})
 "}}}
 
+"LSP {{{
+"https://github.com/prabirshrestha/vim-lsp/blob/master/doc/vim-lsp.txt#L352-L363
+"2021.02.15
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    nmap <buffer> <LocalLeader>d <plug>(lsp-definition)
+    nmap <buffer> <LocalLeader>R <plug>(lsp-rename)
+endfunction
+
+augroup lsp_install
+    au!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+"}}}
 " Python mode{{{
 autocmd FileType python setl autoindent
 autocmd FileType python setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
