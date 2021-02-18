@@ -82,6 +82,7 @@ if dein#load_state('$HOME/.local/share/neovim/dein')
   endif
 
   call dein#add('airblade/vim-gitgutter')
+  call dein#add('blueyed/vim-diminactive')
   call dein#add('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],
                                                \ 'build': 'sh -c "cd app && yarn install"' })
   call dein#add('lighttiger2505/deoplete-vim-lsp')
@@ -213,6 +214,9 @@ highlight CursorLineNr cterm=bold      ctermfg=255  ctermbg=130  gui=bold      g
 
 " Error
 highlight Error ctermbg=darkred guibg=white
+
+" Inactive Buffer
+highlight ColorColumn ctermfg=gray ctermbg=NONE
 " }}}
 
 " Gdiff{{{
