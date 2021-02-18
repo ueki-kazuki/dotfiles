@@ -264,16 +264,38 @@ highlight Directory     term=bold ctermfg=11 guifg=#1600FF
 " Define mappings
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
+let s:floating_window_width_ratio = 0.8
+let s:floating_window_height_ratio = 0.7
+call denite#custom#option('default', {
+\ 'auto_action': 'preview',
+\ 'floating_preview': v:true,
+\ 'preview_height': float2nr(&lines * s:floating_window_height_ratio),
+\ 'preview_width': float2nr(&columns * s:floating_window_width_ratio / 2),
+\ 'prompt': '% ',
+\ 'split': 'floating',
+\ 'vertical_preview': v:true,
+\ 'wincol': float2nr((&columns - (&columns * s:floating_window_width_ratio)) / 2),
+\ 'winheight': float2nr(&lines * s:floating_window_height_ratio),
+\ 'winrow': float2nr((&lines - (&lines * s:floating_window_height_ratio)) / 2),
+\ 'winwidth': float2nr(&columns * s:floating_window_width_ratio / 2)
+\ })
 call denite#custom#var('file/rec', 'command',
-                       \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
+        \ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
+call denite#custom#var('grep', {
+	\ 'command': ['rg'],
+	\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
+	\ 'recursive_opts': [],
+	\ 'pattern_opt': ['--regexp'],
+	\ 'separator': ['--'],
+	\ 'final_opts': [],
+	\ })
 " Define alias
 call denite#custom#alias('source', 'file/rec/git', 'file/rec')
 call denite#custom#var('file/rec/git', 'command',
       \ ['git', 'ls-files', '-co', '--exclude-standard'])
+call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
+      \ [ '.git/', '.ropeproject/', '__pycache__/',
+      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
 autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
   nnoremap <silent><buffer><expr> <Esc>
@@ -298,6 +320,12 @@ function! s:denite_my_settings() abort
   \ denite#do_map('open_filter_buffer')
   nnoremap <silent><buffer><expr> ^
   \ denite#do_map('move_up_path')
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_my_settings()
+function! s:denite_filter_my_settings() abort
+  imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+  imap <silent><buffer> <ESC> <Plug>(denite_filter_quit)
 endfunction
 "}}}
 
@@ -348,16 +376,28 @@ endfunction
 " 2021/01/05
 let mapleader = "\<Space>"
 let maplocalleader = ","
-nnoremap <silent><Leader>o :<C-u>Denite `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
-nnoremap <Leader>E :Defx `escape(expand('%:p:h'), ' :')` -search=`expand('%:p')`<CR>
-nnoremap <Leader>c :tabedit $HOME/.config/nvim/init.vim<CR>
-nnoremap <Leader>r :<C-u>Denite register<CR>
-nnoremap <leader>g :<C-u>Denite grep<CR>
-nnoremap <leader>j :<C-u>Denite jump<CR>
-nnoremap <leader>l :<C-u>Denite line<CR>
-nnoremap <leader>s :<C-u>split<CR>
-nnoremap <leader>v :<C-u>vsplit<CR>
-nnoremap <leader>q :<C-u>close<CR>
+nnoremap <silent> <Leader>o :<C-u>DeniteProjectDir `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
+nnoremap <silent> <Leader>E :Defx `escape(expand('%:p:h'), ' :')` -search=`expand('%:p')`<CR>
+nnoremap <silent> <Leader>cf :tabedit $HOME/.config/nvim/init.vim<CR>
+nnoremap <silent> <Leader>cd :cd %:h<CR>
+nnoremap <silent> <Leader>R :<C-u>Denite register<CR>
+nnoremap <silent> <Leader>r :<C-u>Denite -resume -buffer-name=search-buffer-denite<CR>
+nnoremap <silent> <leader>g :<C-u>Denite grep -buffer-name=search-buffer-denite<CR>
+nnoremap <silent> <leader>j :<C-u>Denite jump<CR>
+nnoremap <silent> <leader>l :<C-u>Denite line<CR>
+nnoremap <silent> <leader>s :<C-u>split<CR>
+nnoremap <silent> <leader>v :<C-u>vsplit<CR>
+nnoremap <silent> <leader>q :<C-u>close<CR>
+nnoremap <silent> <leader><leader> :DeniteProjectDir buffer file_mru file/rec/git<CR>
+nnoremap <silent> <leader>* :<C-u>DeniteCursorWord grep
+nnoremap <silent> <Leader>y "+y
+vnoremap <silent> <Leader>y "+y
+nnoremap <silent> <Leader>d "+d
+vnoremap <silent> <Leader>d "+d
+nnoremap <silent> <Leader>p :<C-u>Denite neoyank<CR>
+nnoremap <silent> <Leader>P "+P
+vnoremap <silent> <Leader>p "+p
+vnoremap <silent> <Leader>P "+P
 nnoremap <silent> <C-t><C-t>   :<C-u>Denite buffer<CR>
 nnoremap <silent> <C-t>t       :<C-u>Denite buffer<CR>
 nnoremap <silent> <C-t><C-p>   :<C-u>Denite buffer -resume -cursor-pos=+1 -immediately<CR>
@@ -369,16 +409,6 @@ nnoremap <silent> <C-t>n       :<C-u>Denite buffer -resume -cursor-pos=-1 -immed
 " vim-which-key{{{
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :WhichKeyVisual '<Space>'<CR>
-nnoremap <silent> <leader><leader> :Denite buffer file_mru<CR>
-nnoremap <silent> <leader>* :<C-u>DeniteCursorWord grep
-nnoremap <silent> <Leader>y "+y
-vnoremap <silent> <Leader>y "+y
-nnoremap <silent> <Leader>d "+d
-vnoremap <silent> <Leader>d "+d
-nnoremap <silent> <Leader>p "+p
-nnoremap <silent> <Leader>P "+P
-vnoremap <silent> <Leader>p "+p
-vnoremap <silent> <Leader>P "+P
 autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
@@ -461,3 +491,4 @@ nnoremap <leader>Gm :Gmerge
 "   call mkdp#util#install()
 autocmd FileType markdown nnoremap <leader>p :<C-u>MarkdownPreview<CR>
 " }}}
+
