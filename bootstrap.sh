@@ -109,10 +109,10 @@ doIt()
   fi
 
   # install vim-dein
-  if [ ! -d ~/.local/share/nvim/dein ];then
+  if [ ! -d ~/.local/share/neovim/dein ];then
       curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
       chmod +x installer.sh
-      ./installer.sh ~/.local/share/nvim/dein
+      ./installer.sh ~/.local/share/neovim/dein
   fi
 
   # Install oh-my-fish
